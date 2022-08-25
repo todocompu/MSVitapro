@@ -7,6 +7,7 @@ package com.acosux.MSVitapro.dao;
 
 import com.acosux.MSVitapro.util.Pool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.VariablesTO;
 import com.acosux.MSVitapro.util.dao.GenericDaoImpl;
 import com.acosux.MSVitapro.util.dao.GenericSQLDao;
 import java.util.ArrayList;
@@ -26,22 +27,22 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     private GenericSQLDao genericSQLDao;
 
     @Override
-    public List<Pool> listDataSobrevivencia(String regDateStart, String farmcode) throws Exception {
+    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception {
         String sql = "SELECT 'VAR001'as code, gra_ipromedio,'gr' as units, gra_fecha as date,usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje\n"
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "ORDER BY usr_fecha_inserta ASC";
-        return genericSQLDao.obtenerPorSql(sql, Pool.class);
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
-    public List<Pool> listDataInsumos(String regDateStart, String farmcode) throws Exception {
+    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode,  String pool) throws Exception {
         String sql = "SELECT DISTINCT act_version FROM actualizaciones.act_actualizaciones ORDER BY act_version DESC";
-        return genericSQLDao.obtenerPorSql(sql, Pool.class);
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
-    public List<Pool> listDataPesos(String regDateStart, String farmcode) throws Exception {
+    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception {
         String sql = "SELECT DISTINCT act_version FROM actualizaciones.act_actualizaciones ORDER BY act_version DESC";
-        return genericSQLDao.obtenerPorSql(sql, Pool.class);
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
@@ -55,7 +56,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa = '" + farmcode+"'";
         listPoolEditaGramaje = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         // Pool Edit Consumos
-        sql = "SELECT DISTINCT pis_numero FROM inventario.inv_consumos_detalle "
+        sql = "SELECT DISTINCT pis_numero as poolcode FROM inventario.inv_consumos_detalle "
                 + "	INNER JOIN inventario.inv_consumos "
                 + "ON inventario.inv_consumos_detalle.cons_empresa  = inventario.inv_consumos.cons_empresa and "
                 + "inventario.inv_consumos_detalle.cons_periodo  =inventario.inv_consumos.cons_periodo and "

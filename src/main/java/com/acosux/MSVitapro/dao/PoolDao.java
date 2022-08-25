@@ -7,6 +7,7 @@ package com.acosux.MSVitapro.dao;
 
 import com.acosux.MSVitapro.util.Pool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.VariablesTO;
 import com.acosux.MSVitapro.util.dao.GenericDao;
 
 import java.util.List;
@@ -14,11 +15,11 @@ import java.util.List;
 public interface PoolDao extends GenericDao<Pool, Integer> {
 
 
-    List<Pool> listDataSobrevivencia(String regDateStart , String farmcode ) throws Exception;
+    List<VariablesTO> listDataSobrevivencia(String regDateStart , String farmcode, String pool ) throws Exception;
 
-    List<Pool> listDataInsumos(String regDateStart , String farmcode) throws Exception;
+    List<VariablesTO> listDataInsumos(String regDateStart , String farmcode, String pool) throws Exception;
 
-    List<Pool> listDataPesos(String regDateStart , String farmcode) throws Exception;
+    List<VariablesTO> listDataPesos(String regDateStart , String farmcode, String pool) throws Exception;
     
     List<PoolTO> listPoolEdit(String regDateStart , String farmcode) throws Exception;
     

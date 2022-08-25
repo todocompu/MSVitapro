@@ -4,16 +4,29 @@
  */
 package com.acosux.MSVitapro.util;
 
-import javax.persistence.GeneratedValue;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+
 
 /**
  *
  * @author jtabango
  */
+@Entity
 public class PoolTO {
-    private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String poolcode;
+
+     public PoolTO() {
+    }
+
+    public String getPoolcode() {
+        return poolcode;
+    }
+
+   
+    public void setPoolcode(String poolcode) {
+        this.poolcode = poolcode;
+    }
+    
 }

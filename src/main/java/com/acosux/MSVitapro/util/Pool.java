@@ -23,4 +23,29 @@ public class Pool {
     private String poolname;
     
     private List<VariablesTO> variables = new ArrayList<VariablesTO>(1);
+
+    public String getPoolcode() {
+        return poolcode;
+    }
+
+    public void setPoolcode(String poolcode) {
+        this.poolcode = poolcode;
+    }
+
+    public String getPoolname() {
+        return poolname;
+    }
+
+    public void setPoolname(String poolname) {
+        this.poolname = poolname;
+    }
+
+    public List<VariablesTO> getVariables() {
+        return variables;
+    }
+
+    public void setVariables(List<VariablesTO> variables) {
+        this.variables = variables;
+    }
+      
 }
