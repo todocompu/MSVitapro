@@ -43,17 +43,21 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     @Override
     public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception {
 
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'INS001'as code, det_cantidad as value ,inventario.inv_producto.tip_codigo as units, cons_fecha as date,inventario.inv_consumos.usr_fecha_inserta as regDateTime, inventario.inv_consumos_detalle.pro_codigo_principal as productCode FROM inventario.inv_consumos_detalle INNER JOIN inventario.inv_consumos "
-                + "ON inventario.inv_consumos_detalle.cons_empresa  = inventario.inv_consumos.cons_empresa and "
-                + "inventario.inv_consumos_detalle.cons_periodo  =inventario.inv_consumos.cons_periodo and "
-                + "inventario.inv_consumos_detalle.cons_motivo  = inventario.inv_consumos.cons_motivo and "
-                + "inventario.inv_consumos_detalle.cons_numero  = inventario.inv_consumos.cons_numero  and "
-                + "inventario.inv_consumos.cons_empresa ='" + farmcode + "' and usr_fecha_modifica > '" + regDateStart + "' "
-                + "and inventario.inv_consumos_detalle.pis_numero='" + pool + "' "
-                + "INNER JOIN inventario.inv_producto ON "
-                + "inventario.inv_consumos_detalle.cons_empresa = inventario.inv_producto.pro_empresa and "
-                + "inventario.inv_consumos_detalle.pro_codigo_principal =inventario.inv_producto.pro_codigo_principal "
-                + "and inventario.inv_consumos_detalle.pis_numero='" + pool + "' ORDER BY inv_consumos.usr_fecha_modifica ASC, inv_consumos_detalle.sec_codigo ASC, inv_consumos_detalle.pis_numero ASC, inv_consumos.cons_fecha ASC ";
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'INS001'as code, det_cantidad as value, inv_producto.med_codigo as units, "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_inserta as regDateTime, inventario.inv_consumos_detalle.pro_codigo_principal as productCode "
+                + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle INNER JOIN inventario.inv_producto "
+                + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
+                + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
+                + "inv_consumos.cons_motivo = inv_consumos_detalle.cons_motivo and "
+                + "inv_consumos.cons_numero = inv_consumos_detalle.cons_numero and "
+                + "ON inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa and "
+                + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
+                
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' and "
+                + "COALESCE(usr_fecha_modifica, usr_fecha_inserta) > '" + regDateStart + "' AND "
+                + "inv_consumos_detalle.pis_numero='" + pool + "' "
+                
+                + "ORDER BY COALESCE(usr_fecha_modifica, usr_fecha_inserta), inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
@@ -82,7 +86,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inventario.inv_consumos_detalle.pis_empresa = produccion.prd_piscina.pis_empresa AND "
                 + "inventario.inv_consumos_detalle.pis_sector = produccion.prd_piscina.pis_sector AND "
                 + "inventario.inv_consumos_detalle.pis_numero = produccion.prd_piscina.pis_numero "
-                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND inv_consumos.usr_fecha_modifica > '" + regDateStart + "'";
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "'";
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
