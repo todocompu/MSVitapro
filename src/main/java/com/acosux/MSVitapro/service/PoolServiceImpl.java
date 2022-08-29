@@ -14,6 +14,8 @@ import com.acosux.MSVitapro.dao.PoolDao;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author Trabajo
@@ -25,30 +27,24 @@ public class PoolServiceImpl implements PoolService {
     private PoolDao poolDao;
 
     @Override
-    public List<Pool> listDataPool(String regDateStart, String farmcode) throws Exception {
-        List<Pool> pool = new ArrayList<>();
-        Pool poolItem = new Pool();
-        List<VariablesTO> variablesItem;
-        // Aqui falta ponerle el nombre de la piscina D: solo lo deje hasta el codigo pilas
+    public List<PoolTO> listDataPool(String regDateStart, String farmcode) throws Exception {
         List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode);
-        for (int x = 0; x <= poolTO.size(); x++) {
-            
-            poolItem.setPoolcode(poolTO.get(x).getPoolcode());
-            
-            
-            //Aqui agrego el listado de  varaibles TO filtrado por piscina 
-            variablesItem = poolDao.listDataSobrevivencia(regDateStart, farmcode, poolTO.get(x).getPoolcode());
-            poolItem.setVariables(variablesItem);
-            
-            variablesItem = poolDao.listDataPesos(regDateStart, farmcode, poolTO.get(x).getPoolcode());
-            poolItem.setVariables(variablesItem);
-            
-            variablesItem = poolDao.listDataInsumos(regDateStart, farmcode, poolTO.get(x).getPoolcode());
-            poolItem.setVariables(variablesItem);
-            
-            pool.add(poolItem);
-        }
-        return pool;
+        return poolTO;
+    }
+
+    @Override
+    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception {
+        return poolDao.listDataSobrevivencia(regDateStart, farmcode, pool);
+    }
+
+    @Override
+    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception {
+        return poolDao.listDataInsumos(regDateStart, farmcode, pool);
+    }
+
+    @Override
+    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception {
+        return poolDao.listDataPesos(regDateStart, farmcode, pool);
     }
 
 }

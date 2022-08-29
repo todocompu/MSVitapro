@@ -6,6 +6,8 @@
 package com.acosux.MSVitapro.service;
 
 import com.acosux.MSVitapro.util.Pool;
+import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.VariablesTO;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,6 +18,16 @@ import java.util.List;
 @Transactional
 public interface PoolService {
 
-    List<Pool> listDataPool(String regDateStart, String farmcode) throws Exception;
+    @Transactional
+    List<PoolTO> listDataPool(String regDateStart, String farmcode) throws Exception;
+
+    @Transactional
+    List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception;
+
+    @Transactional
+    List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception;
+
+    @Transactional
+    List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception;
 
 }

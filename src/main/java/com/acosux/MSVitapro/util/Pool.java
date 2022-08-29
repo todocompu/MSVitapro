@@ -14,15 +14,15 @@ import javax.persistence.Id;
  * @author jtabango
  */
 public class Pool {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String poolcode;
-    
+
     private String poolname;
-    
-    private List<VariablesTO> variables = new ArrayList<VariablesTO>(1);
+
+    private List<VariablesTO> variables = new ArrayList<VariablesTO>();
 
     public String getPoolcode() {
         return poolcode;
@@ -47,5 +47,5 @@ public class Pool {
     public void setVariables(List<VariablesTO> variables) {
         this.variables = variables;
     }
-      
+
 }

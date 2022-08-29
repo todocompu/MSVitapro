@@ -5,6 +5,8 @@
 package com.acosux.MSVitapro.util;
 
 import java.util.Date;
+import javax.persistence.Embeddable;
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
@@ -13,10 +15,12 @@ import javax.persistence.Id;
  * @author jtabango
  * Se nombra Variables por que asi esta la informacion que nos enviaron
  */
-public class VariablesTO {
-    private static final long serialVersionUID = 1L;
+@Entity
+public class VariablesTO implements java.io.Serializable {
+    
     @Id
-    @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
+    private Integer id;
+    
     private String code;
     
     private String value;
@@ -29,6 +33,14 @@ public class VariablesTO {
     
     private String productCode;
 
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+      
     public String getCode() {
         return code;
     }
