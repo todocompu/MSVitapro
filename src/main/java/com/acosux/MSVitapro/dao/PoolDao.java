@@ -5,6 +5,7 @@
  */
 package com.acosux.MSVitapro.dao;
 
+import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.Pool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.VariablesTO;
@@ -23,6 +24,6 @@ public interface PoolDao extends GenericDao<Pool, Integer> {
     
     List<PoolTO> listPoolEdit(String regDateStart , String farmcode) throws Exception;
     
-
+    List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 }
 

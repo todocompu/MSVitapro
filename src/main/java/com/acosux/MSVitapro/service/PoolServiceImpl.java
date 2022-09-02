@@ -5,18 +5,14 @@
  */
 package com.acosux.MSVitapro.service;
 
-import com.acosux.MSVitapro.util.Pool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import com.acosux.MSVitapro.dao.PoolDao;
+import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.VariablesTO;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author Trabajo
  */
@@ -45,6 +41,11 @@ public class PoolServiceImpl implements PoolService {
     @Override
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception {
         return poolDao.listDataPesos(regDateStart, farmcode, pool);
+    }
+    
+    @Override
+    public List<IntegratedPool> getListIntegratedPool(String integration) throws Exception {
+        return poolDao.getListIntegratedPool(integration);
     }
 
 }
