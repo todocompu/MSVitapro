@@ -5,7 +5,7 @@
  */
 package com.acosux.MSVitapro.service;
 
-import com.acosux.MSVitapro.util.Pool;
+import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,5 +29,8 @@ public interface PoolService {
 
     @Transactional
     List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception;
+
+    @Transactional
+    List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 
 }
