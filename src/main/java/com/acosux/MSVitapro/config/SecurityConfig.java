@@ -16,6 +16,16 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Order(1)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
+    private static final String[] AUTH_WHITELIST = {
+        // -- swagger ui
+        "/v2/api-docs",
+        "/swagger-resources/**",
+        "/configuration/ui",
+        "/configuration/security",
+        "/swagger-ui.html",
+        "/webjars/**"
+    };
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
@@ -25,13 +35,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .addFilterBefore(new CorsFilter(), ChannelProcessingFilter.class)
                 .addFilterBefore(new VerifyTokenFilter(), UsernamePasswordAuthenticationFilter.class)
                 //                .addFilterBefore(new GenerateTokenForUserFilter("/session", authenticationManager(), tokenUtil), UsernamePasswordAuthenticationFilter.class)
-                .authorizeRequests()
-                .anyRequest().authenticated().and().sessionManagement().maximumSessions(1);
+                .authorizeRequests().
+                antMatchers(AUTH_WHITELIST).permitAll(). // whitelist URL permitted
+                antMatchers("/**")
+                .authenticated().and().sessionManagement().maximumSessions(1);
+
     }
 
     @Override
     public void configure(WebSecurity web) throws Exception {
-        web.ignoring().antMatchers(HttpMethod.GET, "/");
+        web.ignoring().antMatchers(HttpMethod.GET, "/",
+                "/v2/api-docs",
+                "/configuration/ui",
+                "/swagger-resources/**",
+                "/configuration/security",
+                "/swagger-ui.html",
+                "/webjars/**");
     }
 
 }
