@@ -56,7 +56,6 @@ build/
 .vscode/
 
 ### OTHER ###
-/src/main/resources
 /target
 /bin/
 .idea/
