@@ -75,9 +75,9 @@ public class UpdateController {
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
-    @RequestMapping(value = "/listIntegacion/{integracion}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/listIntegration/{integration}", method = {RequestMethod.GET})
     public ResponseEntity<List<IntegratedPool>> getListIntegratedPool(
-            @PathVariable("integracion") String integration) {
+            @PathVariable("integration") String integration) {
         List<IntegratedPool> listPool = new ArrayList<>();
         try {
             listPool = poolService.getListIntegratedPool(integration);
@@ -86,7 +86,7 @@ public class UpdateController {
             }
         } catch (Exception e) {
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(listPool, HttpStatus.OK);
     }
 
 }
