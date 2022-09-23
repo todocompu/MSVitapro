@@ -86,7 +86,7 @@ public class UpdateController {
             }
         } catch (Exception e) {
         }
-        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>(listPool, HttpStatus.OK);
     }
 
 }
