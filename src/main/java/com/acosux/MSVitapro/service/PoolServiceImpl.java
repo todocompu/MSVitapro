@@ -23,24 +23,24 @@ public class PoolServiceImpl implements PoolService {
     private PoolDao poolDao;
 
     @Override
-    public List<PoolTO> listDataPool(String regDateStart, String farmcode) throws Exception {
-        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode);
+    public List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter) throws Exception {
+        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode, productCenter);
         return poolTO;
     }
 
     @Override
-    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataSobrevivencia(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataSobrevivencia(regDateStart, farmcode, pool, productCenter);
     }
 
     @Override
-    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataInsumos(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataInsumos(regDateStart, farmcode, pool, productCenter);
     }
 
     @Override
-    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataPesos(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataPesos(regDateStart, farmcode, pool, productCenter);
     }
     
     @Override

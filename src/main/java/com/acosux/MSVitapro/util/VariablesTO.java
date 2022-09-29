@@ -4,7 +4,7 @@
  */
 package com.acosux.MSVitapro.util;
 
-import java.util.Date;
+import java.sql.Date;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -18,21 +18,18 @@ import javax.persistence.Id;
 @Entity
 public class VariablesTO implements java.io.Serializable {
     
+    private static final long serialVersionUID = 1L;
     @Id
     private Integer id;
-    
     private String code;
-    
     private String value;
-    
     private String units;
-    
     private Date date;
-    
     private Date regDateTime;
-    
     private String productCode;
 
+    public VariablesTO(){}
+    
     public Integer getId() {
         return id;
     }

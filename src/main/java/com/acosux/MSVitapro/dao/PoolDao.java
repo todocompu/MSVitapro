@@ -16,13 +16,13 @@ import java.util.List;
 public interface PoolDao extends GenericDao<Pool, Integer> {
 
 
-    List<VariablesTO> listDataSobrevivencia(String regDateStart , String farmcode, String pool ) throws Exception;
+    List<VariablesTO> listDataSobrevivencia(String regDateStart , String farmcode, String pool, String productCenter) throws Exception;
 
-    List<VariablesTO> listDataInsumos(String regDateStart , String farmcode, String pool) throws Exception;
+    List<VariablesTO> listDataInsumos(String regDateStart , String farmcode, String pool, String productCenter) throws Exception;
 
-    List<VariablesTO> listDataPesos(String regDateStart , String farmcode, String pool) throws Exception;
+    List<VariablesTO> listDataPesos(String regDateStart , String farmcode, String pool, String productCenter) throws Exception;
     
-    List<PoolTO> listPoolEdit(String regDateStart , String farmcode) throws Exception;
+    List<PoolTO> listPoolEdit(String regDateStart , String farmcode, String productCenter) throws Exception;
     
     List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 }
