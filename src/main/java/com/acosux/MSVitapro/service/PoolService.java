@@ -7,6 +7,7 @@ package com.acosux.MSVitapro.service;
 
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,18 +20,20 @@ import java.util.List;
 public interface PoolService {
 
     @Transactional
-    List<PoolTO> listDataPool(String regDateStart, String farmcode) throws Exception;
+    List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter) throws Exception;
 
     @Transactional
-    List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception;
+    List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
     @Transactional
-    List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception;
+    List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
     @Transactional
-    List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception;
+    List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
     @Transactional
     List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 
+    @Transactional
+    List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception;
 }

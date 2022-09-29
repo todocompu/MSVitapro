@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.acosux.MSVitapro.service.PoolService;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -36,8 +37,10 @@ public class UpdateController {
     @Autowired
     PoolService poolService;
 
-    @RequestMapping(value = "/feeding/{farmcode}/{regDateStart}", method = {RequestMethod.GET})
-    public ResponseEntity<List<Pool>> getListPoolBYDate(@PathVariable("farmcode") String farmcode,
+    @RequestMapping(value = "/feeding/{farmcode}/{productCenter}/{regDateStart}", method = {RequestMethod.GET})
+    public ResponseEntity<List<Pool>> getListPoolBYDate(
+            @PathVariable("farmcode") String farmcode,
+            @PathVariable("productCenter") String productCenter,
             @PathVariable("regDateStart") String regDateStart) {
         DateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Long da = Long.parseLong(regDateStart);
@@ -46,7 +49,7 @@ public class UpdateController {
         List<Pool> respues = new ArrayList<>();
         List<PoolTO> poolTO = new ArrayList<>();
         try {
-            poolTO = poolService.listDataPool(fecha, farmcode);
+            poolTO = poolService.listDataPool(fecha, farmcode, productCenter);
             if (poolTO.size() > 0) {
                 for (PoolTO item : poolTO) {
                     Pool poolItem = new Pool();
@@ -57,9 +60,9 @@ public class UpdateController {
                     poolItem.setPoolcode(item.getPoolcode());
                     poolItem.setPoolname(item.getPoolname());
                     //Aqui agrego el listado de  varaibles TO filtrado por piscina 
-                    variablesItemSobrevivencia = poolService.listDataSobrevivencia(fecha, farmcode, item.getPoolcode());
-                    variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode());
-                    variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode());
+                    variablesItemSobrevivencia = poolService.listDataSobrevivencia(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
 
                     poolItem.getVariables().addAll(variablesItemSobrevivencia);
                     poolItem.getVariables().addAll(variablesItemGramaje);
@@ -87,6 +90,22 @@ public class UpdateController {
         } catch (Exception e) {
         }
         return new ResponseEntity<>(listPool, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/verifiyProduct/{farmcode}/{codeIntegration}/{listAll}", method = {RequestMethod.GET})
+    public ResponseEntity<List<ProductIntegrationTO>> getListProductIntegration(
+            @PathVariable("farmcode") String farCode,
+            @PathVariable("codeIntegration") String codeIntegration,
+            @PathVariable("listAll") boolean listAll) {
+        List<ProductIntegrationTO> listProductIntegration = new ArrayList<>();
+        try {
+            listProductIntegration = poolService.getListProductIntegration(farCode, codeIntegration, listAll);
+            if (listProductIntegration.size() > 0) {
+                return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+        }
+        return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
     }
 
 }

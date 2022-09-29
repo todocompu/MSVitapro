@@ -12,6 +12,7 @@ import java.util.List;
 import com.acosux.MSVitapro.dao.PoolDao;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 /**
  * @author Trabajo
@@ -23,29 +24,34 @@ public class PoolServiceImpl implements PoolService {
     private PoolDao poolDao;
 
     @Override
-    public List<PoolTO> listDataPool(String regDateStart, String farmcode) throws Exception {
-        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode);
+    public List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter) throws Exception {
+        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode, productCenter);
         return poolTO;
     }
 
     @Override
-    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataSobrevivencia(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataSobrevivencia(regDateStart, farmcode, pool, productCenter);
     }
 
     @Override
-    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataInsumos(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataInsumos(regDateStart, farmcode, pool, productCenter);
     }
 
     @Override
-    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool) throws Exception {
-        return poolDao.listDataPesos(regDateStart, farmcode, pool);
+    public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataPesos(regDateStart, farmcode, pool, productCenter);
     }
     
     @Override
     public List<IntegratedPool> getListIntegratedPool(String integration) throws Exception {
         return poolDao.getListIntegratedPool(integration);
+    }
+    
+    @Override
+    public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception{
+        return poolDao.getListProductIntegration(farmCode, codeIntegracion, listAll);
     }
 
 }
