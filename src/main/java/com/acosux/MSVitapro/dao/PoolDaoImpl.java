@@ -11,6 +11,7 @@ import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import com.acosux.MSVitapro.util.dao.GenericDaoImpl;
 import com.acosux.MSVitapro.util.dao.GenericSQLDao;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -56,7 +57,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
                 + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' and "
                 + "COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "' AND "
-                + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter +"' "
+                + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
                 + "ORDER BY COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta), inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
@@ -108,6 +109,30 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "WHERE prd_sector.sec_integracion_con = '" + integration + "' ";
         lisIntegratedPool = (genericSQLDao.obtenerPorSql(sql, IntegratedPool.class));
         return lisIntegratedPool;
+    }
+
+    @Override
+    public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception {
+        List<ProductIntegrationTO> listProductIntegration = new ArrayList();
+        String containAll = listAll ? "AND inv_producto.pro_codigo_integracion IS NULL " : "";
+        String sql;
+        sql = "SELECT row_number() over (partition by '' order by '') as id, inv_consumos.cons_empresa as company, prd_sector.sec_codigo as productCenter,"
+                + "inv_producto.pro_codigo_principal as productCode, inv_producto.pro_codigo_integracion as productCodeIntegration, inv_producto.pro_nombre as productName, inv_producto.pro_detalle as productDescription "
+                + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle ON "
+                + "inv_consumos.cons_empresa = inv_consumos_detalle.cons_empresa AND "
+                + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo AND "
+                + "inv_consumos.cons_motivo = inv_consumos_detalle.cons_motivo AND "
+                + "inv_consumos.cons_numero = inv_consumos_detalle.cons_numero "
+                + "INNER JOIN inventario.inv_producto ON "
+                + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa AND "
+                + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
+                + "INNER JOIN produccion.prd_sector ON "
+                + "inv_consumos_detalle.sec_empresa = prd_sector.sec_empresa AND "
+                + "inv_consumos_detalle.sec_codigo = prd_sector.sec_codigo "
+                + "WHERE inv_consumos.cons_empresa='" + farmCode + "' AND prd_sector.sec_integracion_con='" + codeIntegracion + "' " + containAll 
+                + "GROUP by 4,5,company, productCenter, productName, productDescription Order by productCode ASC";
+        listProductIntegration = (genericSQLDao.obtenerPorSql(sql, ProductIntegrationTO.class));
+        return listProductIntegration;
     }
 
 }

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import com.acosux.MSVitapro.service.PoolService;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -89,6 +90,22 @@ public class UpdateController {
         } catch (Exception e) {
         }
         return new ResponseEntity<>(listPool, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/verifiyProduct/{farmcode}/{codeIntegration}/{listAll}", method = {RequestMethod.GET})
+    public ResponseEntity<List<ProductIntegrationTO>> getListProductIntegration(
+            @PathVariable("farmcode") String farCode,
+            @PathVariable("codeIntegration") String codeIntegration,
+            @PathVariable("listAll") boolean listAll) {
+        List<ProductIntegrationTO> listProductIntegration = new ArrayList<>();
+        try {
+            listProductIntegration = poolService.getListProductIntegration(farCode, codeIntegration, listAll);
+            if (listProductIntegration.size() > 0) {
+                return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+        }
+        return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
     }
 
 }

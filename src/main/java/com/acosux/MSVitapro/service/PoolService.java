@@ -7,6 +7,7 @@ package com.acosux.MSVitapro.service;
 
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,4 +34,6 @@ public interface PoolService {
     @Transactional
     List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 
+    @Transactional
+    List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception;
 }

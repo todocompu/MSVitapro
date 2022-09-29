@@ -12,6 +12,7 @@ import java.util.List;
 import com.acosux.MSVitapro.dao.PoolDao;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
+import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
 /**
  * @author Trabajo
@@ -46,6 +47,11 @@ public class PoolServiceImpl implements PoolService {
     @Override
     public List<IntegratedPool> getListIntegratedPool(String integration) throws Exception {
         return poolDao.getListIntegratedPool(integration);
+    }
+    
+    @Override
+    public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception{
+        return poolDao.getListProductIntegration(farmCode, codeIntegracion, listAll);
     }
 
 }
