@@ -33,7 +33,7 @@ public class SecurityController {
         try {
             String token = securityService.getToken(user, password, timeExpiredDay);
             if (token != null) {
-                return new ResponseEntity<>("Bearer " + token, HttpStatus.OK);
+                return new ResponseEntity<>(token, HttpStatus.OK);
             }
         } catch (Exception e) {
         }

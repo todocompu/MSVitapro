@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class SecurityServiceImpl implements SecurityService {
 
     final String usrVitapro = "adminvitapro";
-    final String passVitapro = "e8aff578850c317bdc358b495dce983503996dabd73e7c23bce03591988b66f8";
+    final String passVitapro = "77d62939b00c38b450e66c5c18512069c9959bdc6331553181d96770a410997c";
 
     @Override
     public String getToken(String user, String password, int timeExpiredDay) throws Exception {
