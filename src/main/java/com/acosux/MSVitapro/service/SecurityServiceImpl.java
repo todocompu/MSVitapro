@@ -14,19 +14,19 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SecurityServiceImpl implements SecurityService {
-    
+
     final String usrVitapro = "adminvitapro";
     final String passVitapro = "e8aff578850c317bdc358b495dce983503996dabd73e7c23bce03591988b66f8";
-    
+
     @Override
     public String getToken(String user, String password, int timeExpiredDay) throws Exception {
         Encriptacion encriptacion = new Encriptacion();
         TokenUtil tokenUtil = new TokenUtil();
         String clave = encriptacion.sha256(password);
         if (user.equals(usrVitapro) && clave.equals(passVitapro)) {
-            return tokenUtil.createTokenForUser(user, timeExpiredDay);
+            return "Bearer " + tokenUtil.createTokenForUser(user, timeExpiredDay);
         }
         return "";
     }
-    
+
 }
