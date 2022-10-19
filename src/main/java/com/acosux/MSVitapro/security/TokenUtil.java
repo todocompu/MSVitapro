@@ -2,6 +2,7 @@ package com.acosux.MSVitapro.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import javax.servlet.http.*;
@@ -11,6 +12,7 @@ import java.util.*;
 public class TokenUtil {
 
     private static final String AUTH_HEADER_NAME = "Authorization";
+    private static final long VALIDITY_TIME_MS = 1 * 24 * 60 * 60 * 1000;
 
     private final String secret = "mrin";
 
@@ -31,6 +33,15 @@ public class TokenUtil {
                 .parseClaimsJws(token)
                 .getBody();
         return new TokenUser((String) claims.get("userId"), (String) claims.get("sub"));
+    }
+
+    public String createTokenForUser(String user, int timeExpiredDay) {
+        return Jwts.builder()
+                .setExpiration(new Date(System.currentTimeMillis() + VALIDITY_TIME_MS * timeExpiredDay))
+                .setSubject(user)
+                .claim("userId", user)
+                .signWith(SignatureAlgorithm.HS256, secret)
+                .compact();
     }
 
 }
