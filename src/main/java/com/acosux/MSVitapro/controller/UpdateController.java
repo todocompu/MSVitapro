@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.acosux.MSVitapro.service.PoolService;
+import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
@@ -57,16 +58,25 @@ public class UpdateController {
                     List<VariablesTO> variablesItemSobrevivencia = new ArrayList();
                     List<VariablesTO> variablesItemGramaje = new ArrayList();
                     List<VariablesTO> variablesItemConsumo = new ArrayList();
+                    List<VariablesTO> variablesItemConsumoEnd = new ArrayList();
+                    List<Dates> listDates = new ArrayList();
                     poolItem.setPoolcode(item.getPoolcode());
                     poolItem.setPoolname(item.getPoolname());
                     //Aqui agrego el listado de  varaibles TO filtrado por piscina 
                     variablesItemSobrevivencia = poolService.listDataSobrevivencia(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
-
+                    listDates = poolService.listDataDatesUpdates(fecha, farmcode, item.getPoolcode(), productCenter);
+                    if (listDates.size() > 0) {
+                        variablesItemConsumoEnd.addAll(variablesItemConsumo);
+                        for (Dates itemDate : listDates) {
+                            List<VariablesTO> variablesItem = poolService.listDataInsumosEnd(itemDate.getConsFecha(), farmcode, item.getPoolcode(), productCenter);
+                            variablesItemConsumoEnd.addAll(variablesItem);
+                        }
+                    }
                     poolItem.getVariables().addAll(variablesItemSobrevivencia);
                     poolItem.getVariables().addAll(variablesItemGramaje);
-                    poolItem.getVariables().addAll(variablesItemConsumo);
+                    poolItem.getVariables().addAll(variablesItemConsumoEnd);
                     respues.add(poolItem);
                 }
             }
