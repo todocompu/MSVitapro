@@ -5,10 +5,13 @@
 package com.acosux.MSVitapro.util;
 
 import java.sql.Date;
+import java.sql.Timestamp;
 import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -25,7 +28,8 @@ public class VariablesTO implements java.io.Serializable {
     private String value;
     private String units;
     private Date date;
-    private Date regDateTime;
+    //@Temporal(TemporalType.TIMESTAMP)
+    private Timestamp regDateTime;
     private String productCode;
 
     public VariablesTO(){}
@@ -70,11 +74,11 @@ public class VariablesTO implements java.io.Serializable {
         this.date = date;
     }
 
-    public Date getRegDateTime() {
+    public Timestamp getRegDateTime() {
         return regDateTime;
     }
 
-    public void setRegDateTime(Date regDateTime) {
+    public void setRegDateTime(Timestamp regDateTime) {
         this.regDateTime = regDateTime;
     }
 
