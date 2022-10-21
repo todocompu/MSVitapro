@@ -31,14 +31,14 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, to_char(usr_fecha_inserta, 'YYYY-MM-DD') as regDateTime, '' as productCode FROM produccion.prd_grameaje "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje "
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and  gra_piscina='" + pool + "' and  gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, DATE(usr_fecha_inserta) as regDateTime, '' as productCode FROM produccion.prd_grameaje "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje "
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and gra_piscina ='" + pool + "' and gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta ASC, gra_sector ASC, gra_piscina ASC, gra_fecha ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
@@ -47,7 +47,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
 
         String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, to_char(inventario.inv_consumos.usr_fecha_inserta, 'YYYY-MM-DD') as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
                 + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
@@ -85,7 +85,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     public List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception {
 
         String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, to_char(inventario.inv_consumos.usr_fecha_inserta, 'YYYY-MM-DD') as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
                 + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
