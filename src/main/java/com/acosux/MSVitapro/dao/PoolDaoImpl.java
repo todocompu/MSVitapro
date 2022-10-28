@@ -46,7 +46,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     @Override
     public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
 
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id,  CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, CASE WHEN inv_consumos.cons_anulado THEN null ELSE ROUND(det_cantidad,2) END as value, inv_producto.med_codigo as units, "
                 + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
