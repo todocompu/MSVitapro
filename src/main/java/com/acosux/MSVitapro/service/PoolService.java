@@ -5,6 +5,7 @@
  */
 package com.acosux.MSVitapro.service;
 
+import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
@@ -30,6 +31,12 @@ public interface PoolService {
 
     @Transactional
     List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
+    @Transactional
+    List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
+    @Transactional
+    List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception;
 
     @Transactional
     List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;

@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import com.acosux.MSVitapro.dao.PoolDao;
+import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
+
 /**
  * @author Trabajo
  */
@@ -43,14 +45,24 @@ public class PoolServiceImpl implements PoolService {
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
         return poolDao.listDataPesos(regDateStart, farmcode, pool, productCenter);
     }
-    
+
+    @Override
+    public List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataDatesUpdates(regDateStart, farmcode, pool, productCenter);
+    }
+
+    @Override
+    public List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listDataInsumosEnd(consFecha, farmcode, pool, productCenter);
+    }
+
     @Override
     public List<IntegratedPool> getListIntegratedPool(String integration) throws Exception {
         return poolDao.getListIntegratedPool(integration);
     }
-    
+
     @Override
-    public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception{
+    public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception {
         return poolDao.getListProductIntegration(farmCode, codeIntegracion, listAll);
     }
 

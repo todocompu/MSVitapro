@@ -5,6 +5,7 @@
  */
 package com.acosux.MSVitapro.dao;
 
+import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.Pool;
 import com.acosux.MSVitapro.util.PoolTO;
@@ -30,14 +31,14 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, to_char(usr_fecha_inserta, 'YYYY-MM-DD') as regDateTime, '' as productCode FROM produccion.prd_grameaje "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje "
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and  gra_piscina='" + pool + "' and  gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, DATE(usr_fecha_inserta) as regDateTime, '' as productCode FROM produccion.prd_grameaje "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje "
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and gra_piscina ='" + pool + "' and gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta ASC, gra_sector ASC, gra_piscina ASC, gra_fecha ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
@@ -45,8 +46,8 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     @Override
     public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
 
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, to_char(inventario.inv_consumos.usr_fecha_inserta, 'YYYY-MM-DD') as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id,  CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, CASE WHEN inv_consumos.cons_anulado THEN null ELSE ROUND(det_cantidad,2) END as value, inv_producto.med_codigo as units, "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
                 + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
@@ -56,9 +57,47 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa and "
                 + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
                 + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' and "
-                + "COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "' AND "
+                + "inv_consumos.usr_fecha_modifica > '" + regDateStart + "' AND inv_consumos.usr_fecha_modifica = inv_consumos.usr_fecha_inserta AND "
                 + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
                 + "ORDER BY COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta), inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
+    }
+
+    @Override
+    public List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        String sql = "SELECT DISTINCT inventario.inv_consumos.cons_fecha "
+                + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
+                + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
+                + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
+                + "inv_consumos.cons_motivo = inv_consumos_detalle.cons_motivo and "
+                + "inv_consumos.cons_numero = inv_consumos_detalle.cons_numero "
+                + "INNER JOIN inventario.inv_producto ON "
+                + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa AND "
+                + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND "
+                + "inv_consumos.usr_fecha_modifica > '" + regDateStart + "'  AND "
+                + "inv_consumos.usr_fecha_modifica <> inv_consumos.usr_fecha_inserta AND "
+                + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' ORDER BY cons_fecha";
+        return genericSQLDao.obtenerPorSql(sql, Dates.class);
+    }
+
+    @Override
+    public List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception {
+
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+                + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
+                + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
+                + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
+                + "inv_consumos.cons_motivo = inv_consumos_detalle.cons_motivo and "
+                + "inv_consumos.cons_numero = inv_consumos_detalle.cons_numero "
+                + "INNER JOIN inventario.inv_producto ON "
+                + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa and "
+                + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND "
+                + "inventario.inv_consumos.cons_fecha = '" + consFecha + "' AND "
+                + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
+                + "ORDER BY inventario.inv_consumos.cons_fecha, inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
@@ -129,7 +168,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "INNER JOIN produccion.prd_sector ON "
                 + "inv_consumos_detalle.sec_empresa = prd_sector.sec_empresa AND "
                 + "inv_consumos_detalle.sec_codigo = prd_sector.sec_codigo "
-                + "WHERE inv_consumos.cons_empresa='" + farmCode + "' AND prd_sector.sec_integracion_con='" + codeIntegracion + "' " + containAll 
+                + "WHERE inv_consumos.cons_empresa='" + farmCode + "' AND prd_sector.sec_integracion_con='" + codeIntegracion + "' " + containAll
                 + "GROUP by 4,5,company, productCenter, productName, productDescription Order by productCode ASC";
         listProductIntegration = (genericSQLDao.obtenerPorSql(sql, ProductIntegrationTO.class));
         return listProductIntegration;
