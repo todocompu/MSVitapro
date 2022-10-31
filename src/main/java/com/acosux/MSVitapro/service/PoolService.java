@@ -31,7 +31,10 @@ public interface PoolService {
 
     @Transactional
     List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
-
+    
+    @Transactional
+    List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+    
     @Transactional
     List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
@@ -43,4 +46,7 @@ public interface PoolService {
 
     @Transactional
     List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception;
+    
+    @Transactional
+    List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 }

@@ -57,15 +57,21 @@ public class UpdateController {
                     Map<String, Object> listados = new HashMap<String, Object>();
                     List<VariablesTO> variablesItemSobrevivencia = new ArrayList();
                     List<VariablesTO> variablesItemGramaje = new ArrayList();
+                    List<VariablesTO> variablesItemGramajeEliminados = new ArrayList();
                     List<VariablesTO> variablesItemConsumo = new ArrayList();
                     List<VariablesTO> variablesItemConsumoEnd = new ArrayList();
+                    List<VariablesTO> variablesItemConsumoDelete = new ArrayList();
                     List<Dates> listDates = new ArrayList();
                     poolItem.setPoolcode(item.getPoolcode());
                     poolItem.setPoolname(item.getPoolname());
                     //Aqui agrego el listado de  varaibles TO filtrado por piscina 
                     variablesItemSobrevivencia = poolService.listDataSobrevivencia(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramajeEliminados = poolService.listGraDelete(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramaje.addAll(variablesItemGramajeEliminados);
                     variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumoDelete = poolService.listDataConsDelete(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumoEnd.addAll(variablesItemConsumoDelete);
                     listDates = poolService.listDataDatesUpdates(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumoEnd.addAll(variablesItemConsumo);
                     if (listDates.size() > 0) {
