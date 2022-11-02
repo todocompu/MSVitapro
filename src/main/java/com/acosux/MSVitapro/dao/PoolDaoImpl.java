@@ -14,10 +14,14 @@ import com.acosux.MSVitapro.util.dao.GenericDaoImpl;
 import com.acosux.MSVitapro.util.dao.GenericSQLDao;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -75,7 +79,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT * FROM inventario.fun_consumos_eliminados('"+farmcode+ "','" + regDateStart+ "','" + pool + "','" + productCenter + "')";
+        String sql = "SELECT * FROM inventario.fun_consumos_eliminados('" + farmcode + "','" + regDateStart + "','" + pool + "','" + productCenter + "')";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
@@ -146,7 +150,15 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
-        listPool.stream().distinct().collect(Collectors.toList());
+        List listaEndPool = new ArrayList();
+        Map<Integer, PoolTO> mapPool = new HashMap<Integer, PoolTO>(listPool.size());
+        for (PoolTO p : listPool) {
+            mapPool.put(p.hashCode(), p);
+        }
+        for (Entry<Integer, PoolTO> p : mapPool.entrySet()) {
+            listaEndPool.add(p.getValue());
+        }
+        listPool = listaEndPool;
         return listPool;
     }
 
