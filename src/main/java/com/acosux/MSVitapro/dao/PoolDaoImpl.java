@@ -14,10 +14,14 @@ import com.acosux.MSVitapro.util.dao.GenericDaoImpl;
 import com.acosux.MSVitapro.util.dao.GenericSQLDao;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import java.util.ArrayList;
+import java.util.HashMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -33,6 +37,16 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
         String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, usr_fecha_inserta as regDateTime, '' as productCode FROM produccion.prd_grameaje "
                 + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and  gra_piscina='" + pool + "' and  gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
+    }
+
+    @Override
+    public List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, null as value,'gr' as units, gra_fecha as date, sis_suceso.sus_fecha as regDateTime, '' as productCode "
+                + " FROM sistemaweb.sis_suceso_gramaje INNER JOIN sistemaweb.sis_suceso "
+                + " ON sis_suceso_gramaje.sus_suceso = sis_suceso.sus_secuencia "
+                + "WHERE sis_suceso_gramaje.gra_fecha > '" + regDateStart + "'  AND sis_suceso.sus_suceso='DELETE' AND gra_empresa ='" + farmcode + "' AND "
+                + "gra_piscina='" + pool + "' AND  gra_sector='" + productCenter + "' ORDER BY sis_suceso_gramaje.sus_suceso, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
@@ -60,6 +74,12 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inv_consumos.usr_fecha_modifica > '" + regDateStart + "' AND inv_consumos.usr_fecha_modifica = inv_consumos.usr_fecha_inserta AND "
                 + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
                 + "ORDER BY COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta), inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
+        return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
+    }
+
+    @Override
+    public List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        String sql = "SELECT * FROM inventario.fun_consumos_eliminados('" + farmcode + "','" + regDateStart + "','" + pool + "','" + productCenter + "')";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
@@ -130,7 +150,15 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
-        listPool.stream().distinct().collect(Collectors.toList());
+        List listaEndPool = new ArrayList();
+        Map<Integer, PoolTO> mapPool = new HashMap<Integer, PoolTO>(listPool.size());
+        for (PoolTO p : listPool) {
+            mapPool.put(p.hashCode(), p);
+        }
+        for (Entry<Integer, PoolTO> p : mapPool.entrySet()) {
+            listaEndPool.add(p.getValue());
+        }
+        listPool = listaEndPool;
         return listPool;
     }
 

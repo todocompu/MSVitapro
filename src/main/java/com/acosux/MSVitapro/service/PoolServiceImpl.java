@@ -45,6 +45,11 @@ public class PoolServiceImpl implements PoolService {
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
         return poolDao.listDataPesos(regDateStart, farmcode, pool, productCenter);
     }
+    
+    @Override
+    public List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listGraDelete(regDateStart, farmcode, pool, productCenter);
+    }
 
     @Override
     public List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
@@ -64,6 +69,11 @@ public class PoolServiceImpl implements PoolService {
     @Override
     public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception {
         return poolDao.getListProductIntegration(farmCode, codeIntegracion, listAll);
+    }
+    
+    @Override
+    public List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception{
+        return poolDao.listDataConsDelete(regDateStart, farmcode, pool, productCenter);
     }
 
 }
