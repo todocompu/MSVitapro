@@ -79,7 +79,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT * FROM inventario.fun_consumos_eliminados('" + farmcode + "','" + regDateStart + "','" + pool + "','" + productCenter + "')";
+        String sql = "SELECT * FROM inventario.fun_consumos_eliminados('"+farmcode+ "','" + regDateStart+ "','" + pool + "','" + productCenter + "')";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
