@@ -25,6 +25,8 @@ public interface PoolDao extends GenericDao<Pool, Integer> {
 
     List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
+    List<VariablesTO> listSobreDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
     List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter) throws Exception;
 
     List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
@@ -34,6 +36,6 @@ public interface PoolDao extends GenericDao<Pool, Integer> {
     List<IntegratedPool> getListIntegratedPool(String integration) throws Exception;
 
     List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception;
-    
+
     List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 }

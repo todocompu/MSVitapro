@@ -50,6 +50,11 @@ public class PoolServiceImpl implements PoolService {
     public List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
         return poolDao.listGraDelete(regDateStart, farmcode, pool, productCenter);
     }
+    
+    @Override
+    public List<VariablesTO> listSobreDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        return poolDao.listSobreDelete(regDateStart, farmcode, pool, productCenter);
+    }
 
     @Override
     public List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {

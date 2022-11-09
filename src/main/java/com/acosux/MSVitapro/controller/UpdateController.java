@@ -69,6 +69,7 @@ public class UpdateController {
                     variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramajeEliminados = poolService.listGraDelete(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramaje.addAll(variablesItemGramajeEliminados);
+                    variablesItemGramaje.addAll(poolService.listSobreDelete(fecha, farmcode, item.getPoolcode(), productCenter));
                     variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumoDelete = poolService.listDataConsDelete(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumoEnd.addAll(variablesItemConsumoDelete);
