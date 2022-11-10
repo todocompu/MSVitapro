@@ -46,7 +46,9 @@ public class UpdateController {
         DateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Long da = Long.parseLong(regDateStart);
         Date date = new Date(da);
-        String fecha = formato.format(date);
+        Long dat = date.getTime();
+        Date date1 = new Date(dat);
+        String fecha = formato.format(date1);
         List<Pool> respues = new ArrayList<>();
         List<PoolTO> poolTO = new ArrayList<>();
         try {
