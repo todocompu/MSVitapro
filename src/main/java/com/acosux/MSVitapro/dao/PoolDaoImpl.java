@@ -136,6 +136,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         List<PoolTO> listPoolEditaGramaje = new ArrayList<>();
         List<PoolTO> listPoolDeleteGramaje = new ArrayList<>();
         List<PoolTO> listPoolEditaConsumos = new ArrayList<>();
+        List<PoolTO> listPoolDeleteConsumos = new ArrayList<>();
         List<PoolTO> listPool = new ArrayList<>();
         String sql;
         // Pool Edit Gramaje
@@ -160,11 +161,16 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inventario.inv_consumos_detalle.pis_empresa = produccion.prd_piscina.pis_empresa AND "
                 + "inventario.inv_consumos_detalle.pis_sector = produccion.prd_piscina.pis_sector AND "
                 + "inventario.inv_consumos_detalle.pis_numero = produccion.prd_piscina.pis_numero "
-                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND inv_consumos_detalle.pis_sector = '" + productCenter + "' AND COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "'";
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND inv_consumos_detalle.pis_sector = '" + productCenter + "' AND COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "'";        
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
+        
+        sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
+        
         listPool.addAll(listPoolDeleteGramaje);
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
+        listPool.addAll(listPoolDeleteConsumos);
         List listaEndPool = new ArrayList();
         Map<Integer, PoolTO> mapPool = new HashMap<Integer, PoolTO>(listPool.size());
         for (PoolTO p : listPool) {
