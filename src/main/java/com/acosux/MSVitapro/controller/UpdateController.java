@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.TimeZone;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,12 +44,13 @@ public class UpdateController {
             @PathVariable("farmcode") String farmcode,
             @PathVariable("productCenter") String productCenter,
             @PathVariable("regDateStart") String regDateStart) {
-        DateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatoFecha = "yyyy-MM-dd HH:mm:ss";
         Long da = Long.parseLong(regDateStart);
         Date date = new Date(da);
-        Long dat = date.getTime();
-        Date date1 = new Date(dat);
-        String fecha = formato.format(date1);
+        TimeZone timeZone = TimeZone.getTimeZone("America/Danmarkshavn");
+        SimpleDateFormat formato = new SimpleDateFormat(formatoFecha);
+        formato.setTimeZone(timeZone);
+        String fecha = formato.format(date);
         List<Pool> respues = new ArrayList<>();
         List<PoolTO> poolTO = new ArrayList<>();
         try {
