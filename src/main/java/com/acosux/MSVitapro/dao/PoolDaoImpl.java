@@ -35,34 +35,34 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<VariablesTO> listDataPesos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, (usr_fecha_inserta at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime, '' as productCode FROM produccion.prd_grameaje "
-                + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and  gra_piscina='" + pool + "' and  gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, ROUND(gra_ipromedio,2) as value,'gr' as units, gra_fecha as date, usr_fecha_inserta at time zone 'America/Guayaquil' as regDateTime, '' as productCode FROM produccion.prd_grameaje "
+                + "WHERE usr_fecha_inserta at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' and gra_empresa ='" + farmcode + "' and  gra_piscina='" + pool + "' and  gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<VariablesTO> listGraDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, null as value,'gr' as units, gra_fecha as date, (sis_suceso.sus_fecha at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime, '' as productCode "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0006' as code, null as value,'gr' as units, gra_fecha as date, sis_suceso.sus_fecha at time zone 'America/Guayaquil' as regDateTime, '' as productCode "
                 + " FROM sistemaweb.sis_suceso_gramaje INNER JOIN sistemaweb.sis_suceso "
                 + " ON sis_suceso_gramaje.sus_suceso = sis_suceso.sus_secuencia "
-                + "WHERE sis_suceso.sus_fecha  > '" + regDateStart + "'  AND sis_suceso.sus_suceso='DELETE' AND gra_empresa ='" + farmcode + "' AND "
+                + "WHERE sis_suceso.sus_fecha at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' AND sis_suceso.sus_suceso='DELETE' AND gra_empresa ='" + farmcode + "' AND "
                 + "gra_piscina='" + pool + "' AND  gra_sector='" + productCenter + "' ORDER BY sis_suceso_gramaje.sus_suceso, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, (usr_fecha_inserta at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime , '' as productCode FROM produccion.prd_grameaje "
-                + "WHERE usr_fecha_inserta > '" + regDateStart + "' and gra_empresa ='" + farmcode + "' and gra_piscina ='" + pool + "' and gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta ASC, gra_sector ASC, gra_piscina ASC, gra_fecha ASC";
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id, 'VAR0010'as code, ROUND(gra_sobrevivencia,2)as value, '%' as units, gra_fecha as date, usr_fecha_inserta at time zone 'America/Guayaquil' as regDateTime , '' as productCode FROM produccion.prd_grameaje "
+                + "WHERE usr_fecha_inserta at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' and gra_empresa ='" + farmcode + "' and gra_piscina ='" + pool + "' and gra_sector='" + productCenter + "' ORDER BY usr_fecha_inserta ASC, gra_sector ASC, gra_piscina ASC, gra_fecha ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<VariablesTO> listSobreDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0010' as code, null as value,'%' as units, gra_fecha as date, (sis_suceso.sus_fecha at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime, '' as productCode "
+        String sql = "SELECT  row_number() over (partition by '' order by '') as id , 'VAR0010' as code, null as value,'%' as units, gra_fecha as date, sis_suceso.sus_fecha at time zone 'America/Guayaquil' as regDateTime, '' as productCode "
                 + " FROM sistemaweb.sis_suceso_gramaje INNER JOIN sistemaweb.sis_suceso "
                 + " ON sis_suceso_gramaje.sus_suceso = sis_suceso.sus_secuencia "
-                + "WHERE sis_suceso.sus_fecha  > '" + regDateStart + "'  AND sis_suceso.sus_suceso='DELETE' AND gra_empresa ='" + farmcode + "' AND "
+                + "WHERE sis_suceso.sus_fecha at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' AND sis_suceso.sus_suceso='DELETE' AND gra_empresa ='" + farmcode + "' AND "
                 + "gra_piscina='" + pool + "' AND  gra_sector='" + productCenter + "' ORDER BY sis_suceso_gramaje.sus_suceso, gra_sector ASC, gra_piscina ASC, gra_fecha  ASC";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
@@ -71,7 +71,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     public List<VariablesTO> listDataInsumos(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
 
         String sql = "SELECT  row_number() over (partition by '' order by '') as id,  CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, CASE WHEN inv_consumos.cons_anulado THEN null ELSE ROUND(det_cantidad,2) END as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, (inventario.inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
                 + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
@@ -81,7 +81,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa and "
                 + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
                 + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' and "
-                + "inv_consumos.usr_fecha_modifica > '" + regDateStart + "' AND inv_consumos.usr_fecha_modifica = inv_consumos.usr_fecha_inserta AND "
+                + "inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' AND inv_consumos.usr_fecha_modifica = inv_consumos.usr_fecha_inserta AND "
                 + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
                 + "ORDER BY COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta), inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
@@ -105,7 +105,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa AND "
                 + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
                 + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND "
-                + "inv_consumos.usr_fecha_modifica > '" + regDateStart + "'  AND "
+                + "inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' AND "
                 + "inv_consumos.usr_fecha_modifica <> inv_consumos.usr_fecha_inserta AND "
                 + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' ORDER BY cons_fecha";
         return genericSQLDao.obtenerPorSql(sql, Dates.class);
@@ -115,7 +115,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     public List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception {
 
         String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, (inventario.inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil') at time zone 'UTC' as regDateTime, inv_producto.pro_codigo_integracion as productCode "
+                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' as regDateTime, inv_producto.pro_codigo_integracion as productCode "
                 + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
                 + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
                 + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
@@ -145,7 +145,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "produccion.prd_grameaje.pis_empresa = produccion.prd_piscina.pis_empresa AND "
                 + "produccion.prd_grameaje.pis_sector = produccion.prd_piscina.pis_sector AND "
                 + "produccion.prd_grameaje.pis_numero = produccion.prd_piscina.pis_numero "
-                + "WHERE prd_grameaje.usr_fecha_inserta > '" + regDateStart + "' and gra_empresa = '" + farmcode + "' and gra_sector ='" + productCenter + "'";
+                + "WHERE prd_grameaje.usr_fecha_inserta at time zone 'America/Guayaquil'> '" + regDateStart + "' at time zone 'UTC' and gra_empresa = '" + farmcode + "' and gra_sector ='" + productCenter + "'";
         listPoolEditaGramaje = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
         sql = "SELECT * FROM produccion.fun_list_pool_edita_gramaje('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
@@ -161,7 +161,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "inventario.inv_consumos_detalle.pis_empresa = produccion.prd_piscina.pis_empresa AND "
                 + "inventario.inv_consumos_detalle.pis_sector = produccion.prd_piscina.pis_sector AND "
                 + "inventario.inv_consumos_detalle.pis_numero = produccion.prd_piscina.pis_numero "
-                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND inv_consumos_detalle.pis_sector = '" + productCenter + "' AND COALESCE(inv_consumos.usr_fecha_modifica, inv_consumos.usr_fecha_inserta) > '" + regDateStart + "'";        
+                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND inv_consumos_detalle.pis_sector = '" + productCenter + "' AND inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' > '" + regDateStart + "' at time zone 'UTC' ";        
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         
         sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
