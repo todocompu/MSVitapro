@@ -21,8 +21,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * @author Trabajo
@@ -78,29 +76,16 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     @Override
     public List<VariablesTO> listDataInsumosEnd(String consFecha, String farmcode, String pool, String productCenter) throws Exception {
 
-        String sql = "SELECT  row_number() over (partition by '' order by '') as id, CASE WHEN inv_producto.pro_nombre ilike 'Balanceado%' THEN 'VAR0003' ELSE 'VAR0073' END as code, ROUND(det_cantidad,2) as value, inv_producto.med_codigo as units, "
-                + "cons_fecha as date, inventario.inv_consumos.usr_fecha_modifica at time zone 'America/Guayaquil' as regDateTime, inv_producto.pro_codigo_integracion as productCode "
-                + "FROM inventario.inv_consumos INNER JOIN inventario.inv_consumos_detalle "
-                + "ON inv_consumos.cons_empresa  = inv_consumos_detalle.cons_empresa and "
-                + "inv_consumos.cons_periodo = inv_consumos_detalle.cons_periodo and "
-                + "inv_consumos.cons_motivo = inv_consumos_detalle.cons_motivo and "
-                + "inv_consumos.cons_numero = inv_consumos_detalle.cons_numero "
-                + "INNER JOIN inventario.inv_producto ON "
-                + "inv_consumos_detalle.pro_empresa = inv_producto.pro_empresa and "
-                + "inv_consumos_detalle.pro_codigo_principal = inv_producto.pro_codigo_principal "
-                + "WHERE inv_consumos.cons_empresa ='" + farmcode + "' AND "
-                + "inventario.inv_consumos.cons_fecha = '" + consFecha + "' AND "
-                + "inv_consumos_detalle.pis_numero='" + pool + "' AND inv_consumos_detalle.pis_sector='" + productCenter + "' "
-                + "ORDER BY inventario.inv_consumos.cons_fecha, inv_consumos_detalle.sec_codigo, inv_consumos_detalle.pis_numero, inv_consumos.cons_fecha";
+        String sql = "SELECT * from inventario.fun_list_data_insumos_end('" + farmcode + "','" + consFecha + "','" + pool + "','" + productCenter + "')";
         return genericSQLDao.obtenerPorSql(sql, VariablesTO.class);
     }
 
     @Override
     public List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter) throws Exception {
-        List<PoolTO> listPoolEditaGramaje = new ArrayList<>();
-        List<PoolTO> listPoolDeleteGramaje = new ArrayList<>();
-        List<PoolTO> listPoolEditaConsumos = new ArrayList<>();
-        List<PoolTO> listPoolDeleteConsumos = new ArrayList<>();
+        List<PoolTO> listPoolEditaGramaje;
+        List<PoolTO> listPoolDeleteGramaje;
+        List<PoolTO> listPoolEditaConsumos;
+        List<PoolTO> listPoolDeleteConsumos;
         List<PoolTO> listPool = new ArrayList<>();
         String sql;
         // Pool Edit Gramaje
@@ -112,10 +97,10 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         // Pool Edit Consumos
         sql = "SELECT * FROM inventario.fun_list_pool_consumo ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
-        
+
         sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
-        
+
         listPool.addAll(listPoolDeleteGramaje);
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
@@ -134,7 +119,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<IntegratedPool> getListIntegratedPool(String integration) throws Exception {
-        List<IntegratedPool> lisIntegratedPool = new ArrayList<>();
+        List<IntegratedPool> lisIntegratedPool;
         String sql;
         sql = "SELECT row_number() over(partition by '' order by '') as id , sis_empresa.emp_codigo as idCompany, sis_empresa.emp_razon_social as nameCompany, "
                 + "prd_sector.sec_codigo as idProduccionCenter, prd_sector.sec_nombre as nameProduccionCenter, prd_piscina.pis_numero as idPool, prd_piscina.pis_nombre as namePool "
@@ -150,7 +135,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
 
     @Override
     public List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception {
-        List<ProductIntegrationTO> listProductIntegration = new ArrayList();
+        List<ProductIntegrationTO> listProductIntegration;
         String containAll = listAll ? "AND inv_producto.pro_codigo_integracion IS NULL " : "";
         String sql;
         sql = "SELECT row_number() over (partition by '' order by '') as id, inv_consumos.cons_empresa as company, prd_sector.sec_codigo as productCenter,"
