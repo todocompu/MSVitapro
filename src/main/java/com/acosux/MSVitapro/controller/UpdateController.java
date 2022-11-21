@@ -19,12 +19,9 @@ import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
 import com.acosux.MSVitapro.util.ProductIntegrationTO;
 import com.acosux.MSVitapro.util.VariablesTO;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -43,27 +40,25 @@ public class UpdateController {
             @PathVariable("farmcode") String farmcode,
             @PathVariable("productCenter") String productCenter,
             @PathVariable("regDateStart") String regDateStart) {
-        DateFormat formato = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String formatoFecha = "yyyy-MM-dd HH:mm:ss";
         Long da = Long.parseLong(regDateStart);
         Date date = new Date(da);
-        Long dat = date.getTime();
-        Date date1 = new Date(dat);
-        String fecha = formato.format(date1);
+        SimpleDateFormat formato = new SimpleDateFormat(formatoFecha);
+        String fecha = formato.format(date);
         List<Pool> respues = new ArrayList<>();
-        List<PoolTO> poolTO = new ArrayList<>();
+        List<PoolTO> poolTO;
         try {
             poolTO = poolService.listDataPool(fecha, farmcode, productCenter);
             if (poolTO.size() > 0) {
                 for (PoolTO item : poolTO) {
                     Pool poolItem = new Pool();
-                    Map<String, Object> listados = new HashMap<String, Object>();
-                    List<VariablesTO> variablesItemSobrevivencia = new ArrayList();
-                    List<VariablesTO> variablesItemGramaje = new ArrayList();
-                    List<VariablesTO> variablesItemGramajeEliminados = new ArrayList();
-                    List<VariablesTO> variablesItemConsumo = new ArrayList();
+                    List<VariablesTO> variablesItemSobrevivencia;
+                    List<VariablesTO> variablesItemGramaje;
+                    List<VariablesTO> variablesItemGramajeEliminados;
+                    List<VariablesTO> variablesItemConsumo;
                     List<VariablesTO> variablesItemConsumoEnd = new ArrayList();
-                    List<VariablesTO> variablesItemConsumoDelete = new ArrayList();
-                    List<Dates> listDates = new ArrayList();
+                    List<VariablesTO> variablesItemConsumoDelete;
+                    List<Dates> listDates;
                     poolItem.setPoolcode(item.getPoolcode());
                     poolItem.setPoolname(item.getPoolname());
                     //Aqui agrego el listado de  varaibles TO filtrado por piscina 
@@ -71,6 +66,7 @@ public class UpdateController {
                     variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramajeEliminados = poolService.listGraDelete(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemGramaje.addAll(variablesItemGramajeEliminados);
+                    variablesItemGramaje.addAll(poolService.listSobreDelete(fecha, farmcode, item.getPoolcode(), productCenter));
                     variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumoDelete = poolService.listDataConsDelete(fecha, farmcode, item.getPoolcode(), productCenter);
                     variablesItemConsumoEnd.addAll(variablesItemConsumoDelete);
