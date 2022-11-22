@@ -5,22 +5,17 @@
 package com.acosux.MSVitapro.util;
 
 import java.sql.Date;
-import java.sql.Timestamp;
-import javax.persistence.Embeddable;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  *
- * @author jtabango
- * Se nombra Variables por que asi esta la informacion que nos enviaron
+ * @author jtabango Se nombra Variables por que asi esta la informacion que nos
+ * enviaron
  */
 @Entity
 public class VariablesTO implements java.io.Serializable {
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     private Integer id;
@@ -28,12 +23,12 @@ public class VariablesTO implements java.io.Serializable {
     private String value;
     private String units;
     private Date date;
-    //@Temporal(TemporalType.TIMESTAMP)
-    private Timestamp regDateTime;
+    private String regDateTime;
     private String productCode;
 
-    public VariablesTO(){}
-    
+    public VariablesTO() {
+    }
+
     public Integer getId() {
         return id;
     }
@@ -41,7 +36,7 @@ public class VariablesTO implements java.io.Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-      
+
     public String getCode() {
         return code;
     }
@@ -74,11 +69,11 @@ public class VariablesTO implements java.io.Serializable {
         this.date = date;
     }
 
-    public Timestamp getRegDateTime() {
+    public String getRegDateTime() {
         return regDateTime;
     }
 
-    public void setRegDateTime(Timestamp regDateTime) {
+    public void setRegDateTime(String regDateTime) {
         this.regDateTime = regDateTime;
     }
 
@@ -89,6 +84,5 @@ public class VariablesTO implements java.io.Serializable {
     public void setProductCode(String productCode) {
         this.productCode = productCode;
     }
-    
-    
+
 }
