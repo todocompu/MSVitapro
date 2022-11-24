@@ -22,6 +22,7 @@ import com.acosux.MSVitapro.util.VariablesTO;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.TimeZone;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -44,6 +45,8 @@ public class UpdateController {
         Long da = Long.parseLong(regDateStart);
         Date date = new Date(da);
         SimpleDateFormat formato = new SimpleDateFormat(formatoFecha);
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        formato.setTimeZone(timeZone);
         String fecha = formato.format(date);
         List<Pool> respues = new ArrayList<>();
         List<PoolTO> poolTO;
