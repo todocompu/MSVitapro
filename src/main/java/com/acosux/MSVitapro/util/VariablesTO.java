@@ -25,6 +25,7 @@ public class VariablesTO implements java.io.Serializable {
     private Date date;
     private String regDateTime;
     private String productCode;
+    private boolean statusConsumosUpdate;
 
     public VariablesTO() {
     }
@@ -83,6 +84,14 @@ public class VariablesTO implements java.io.Serializable {
 
     public void setProductCode(String productCode) {
         this.productCode = productCode;
+    }
+
+    public boolean getStatusConsumosUpdate() {
+        return statusConsumosUpdate;
+    }
+
+    public void setStatusConsumosUpdate(boolean statusConsumosUpdate) {
+        this.statusConsumosUpdate = statusConsumosUpdate;
     }
 
 }
