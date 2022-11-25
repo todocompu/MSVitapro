@@ -85,6 +85,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         List<PoolTO> listPoolEditaGramaje;
         List<PoolTO> listPoolDeleteGramaje;
         List<PoolTO> listPoolEditaConsumos;
+        List<PoolTO> listoPoolUpdateConsumos;
         List<PoolTO> listPoolDeleteConsumos;
         List<PoolTO> listPool = new ArrayList<>();
         String sql;
@@ -97,7 +98,10 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         // Pool Edit Consumos
         sql = "SELECT * FROM inventario.fun_list_pool_consumo ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
-
+        
+        sql= "SELECT * FROM inventario.fun_list_pool_consumo_update('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        listoPoolUpdateConsumos= (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
+        
         sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
