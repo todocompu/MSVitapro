@@ -81,7 +81,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
     }
 
     @Override
-    public List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter) throws Exception {
+    public List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter, String pool) throws Exception {
         List<PoolTO> listPoolEditaGramaje;
         List<PoolTO> listPoolDeleteGramaje;
         List<PoolTO> listPoolEditaConsumos;
@@ -89,20 +89,21 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         List<PoolTO> listPoolDeleteConsumos;
         List<PoolTO> listPool = new ArrayList<>();
         String sql;
+        String filPool = pool == null || pool.equals("null") ? null : "'" + pool + "'";
         // Pool Edit Gramaje
-        sql = "SELECT * FROM produccion.fun_list_pool_gramaje ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        sql = "SELECT * FROM produccion.fun_list_pool_gramaje ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listPoolEditaGramaje = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
-        sql = "SELECT * FROM produccion.fun_list_pool_edita_gramaje('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        sql = "SELECT * FROM produccion.fun_list_pool_edita_gramaje('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listPoolDeleteGramaje = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
         // Pool Edit Consumos
-        sql = "SELECT * FROM inventario.fun_list_pool_consumo ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        sql = "SELECT * FROM inventario.fun_list_pool_consumo ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
-        sql = "SELECT * FROM inventario.fun_list_pool_consumo_update('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        sql = "SELECT * FROM inventario.fun_list_pool_consumo_update('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listoPoolUpdateConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
-        sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
         listPool.addAll(listPoolDeleteGramaje);

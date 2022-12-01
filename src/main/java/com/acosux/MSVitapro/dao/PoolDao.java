@@ -27,7 +27,7 @@ public interface PoolDao extends GenericDao<Pool, Integer> {
 
     List<VariablesTO> listSobreDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 
-    List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter) throws Exception;
+    List<PoolTO> listPoolEdit(String regDateStart, String farmcode, String productCenter, String pool) throws Exception;
 
     List<Dates> listDataDatesUpdates(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 

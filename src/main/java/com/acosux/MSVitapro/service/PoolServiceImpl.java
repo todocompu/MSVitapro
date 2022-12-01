@@ -26,8 +26,8 @@ public class PoolServiceImpl implements PoolService {
     private PoolDao poolDao;
 
     @Override
-    public List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter) throws Exception {
-        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode, productCenter);
+    public List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter, String pool) throws Exception {
+        List<PoolTO> poolTO = poolDao.listPoolEdit(regDateStart, farmcode, productCenter, pool);
         return poolTO;
     }
 
