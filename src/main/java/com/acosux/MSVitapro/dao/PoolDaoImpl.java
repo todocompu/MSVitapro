@@ -98,10 +98,10 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         // Pool Edit Consumos
         sql = "SELECT * FROM inventario.fun_list_pool_consumo ('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolEditaConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
-        
-        sql= "SELECT * FROM inventario.fun_list_pool_consumo_update('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
-        listoPoolUpdateConsumos= (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
-        
+
+        sql = "SELECT * FROM inventario.fun_list_pool_consumo_update('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
+        listoPoolUpdateConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
+
         sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "')";
         listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
@@ -132,7 +132,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
                 + "prd_piscina.sec_codigo = prd_sector.sec_codigo "
                 + "INNER JOIN sistemaweb.sis_empresa ON "
                 + "prd_sector.sec_empresa = sis_empresa.emp_codigo "
-                + "WHERE prd_sector.sec_integracion_con = '" + integration + "' ";
+                + "WHERE prd_sector.sec_integracion_con = '" + integration + "' AND prd_piscina.pis_activa=true";
         lisIntegratedPool = (genericSQLDao.obtenerPorSql(sql, IntegratedPool.class));
         return lisIntegratedPool;
     }
