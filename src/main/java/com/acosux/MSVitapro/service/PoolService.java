@@ -21,7 +21,7 @@ import java.util.List;
 public interface PoolService {
 
     @Transactional
-    List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter) throws Exception;
+    List<PoolTO> listDataPool(String regDateStart, String farmcode, String productCenter, String pool) throws Exception;
 
     @Transactional
     List<VariablesTO> listDataSobrevivencia(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;

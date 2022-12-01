@@ -51,7 +51,7 @@ public class UpdateController {
         List<Pool> respues = new ArrayList<>();
         List<PoolTO> poolTO;
         try {
-            poolTO = poolService.listDataPool(fecha, farmcode, productCenter);
+            poolTO = poolService.listDataPool(fecha, farmcode, productCenter, null);
             if (poolTO.size() > 0) {
                 for (PoolTO item : poolTO) {
                     Pool poolItem = new Pool();
@@ -123,6 +123,66 @@ public class UpdateController {
         } catch (Exception e) {
         }
         return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
+    }
+    
+     @RequestMapping(value = "/feedingPool/{farmcode}/{productCenter}/{regDateStart}/{pool}", method = {RequestMethod.GET})
+    public ResponseEntity<List<Pool>> getListItemByPool(
+            @PathVariable("farmcode") String farmcode,
+            @PathVariable("productCenter") String productCenter,
+            @PathVariable("regDateStart") String regDateStart,
+            @PathVariable("pool") String pool) {
+        String formatoFecha = "yyyy-MM-dd HH:mm:ss";
+        Long da = Long.parseLong(regDateStart);
+        Date date = new Date(da);
+        SimpleDateFormat formato = new SimpleDateFormat(formatoFecha);
+        TimeZone timeZone = TimeZone.getTimeZone("UTC");
+        formato.setTimeZone(timeZone);
+        String fecha = formato.format(date);
+        List<Pool> respues = new ArrayList<>();
+        List<PoolTO> poolTO;
+        try {
+            poolTO = poolService.listDataPool(fecha, farmcode, productCenter, pool);
+            if (poolTO.size() > 0) {
+                for (PoolTO item : poolTO) {
+                    Pool poolItem = new Pool();
+                    List<VariablesTO> variablesItemSobrevivencia;
+                    List<VariablesTO> variablesItemGramaje;
+                    List<VariablesTO> variablesItemGramajeEliminados;
+                    List<VariablesTO> variablesItemConsumo;
+                    List<VariablesTO> variablesItemConsumoEnd = new ArrayList();
+                    List<VariablesTO> variablesItemConsumoDelete;
+                    List<Dates> listDates;
+                    poolItem.setPoolcode(item.getPoolcode());
+                    poolItem.setPoolname(item.getPoolname());
+                    //Aqui agrego el listado de  varaibles TO filtrado por piscina 
+                    variablesItemSobrevivencia = poolService.listDataSobrevivencia(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramaje = poolService.listDataPesos(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramajeEliminados = poolService.listGraDelete(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemGramaje.addAll(variablesItemGramajeEliminados);
+                    variablesItemGramaje.addAll(poolService.listSobreDelete(fecha, farmcode, item.getPoolcode(), productCenter));
+                    variablesItemConsumo = poolService.listDataInsumos(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumoDelete = poolService.listDataConsDelete(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumoEnd.addAll(variablesItemConsumoDelete);
+                    listDates = poolService.listDataDatesUpdates(fecha, farmcode, item.getPoolcode(), productCenter);
+                    variablesItemConsumoEnd.addAll(variablesItemConsumo);
+                    if (listDates.size() > 0) {
+                        for (Dates itemDate : listDates) {
+                            List<VariablesTO> variablesItem = poolService.listDataInsumosEnd(itemDate.getConsFecha(), farmcode, item.getPoolcode(), productCenter);
+                            variablesItemConsumoEnd.addAll(variablesItem);
+                        }
+                    }
+                    poolItem.getVariables().addAll(variablesItemSobrevivencia);
+                    poolItem.getVariables().addAll(variablesItemGramaje);
+                    poolItem.getVariables().addAll(variablesItemConsumoEnd);
+                    respues.add(poolItem);
+                }
+            }
+            if (respues.size() > 0) {
+                return new ResponseEntity<>(respues, HttpStatus.OK);
+            }
+        } catch (Exception e) {
+        }
+        return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
 
 }
