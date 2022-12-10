@@ -19,10 +19,10 @@ public class Pool {
     @Id
     @GeneratedValue(strategy = javax.persistence.GenerationType.IDENTITY)
     private String poolcode;
-
     private String poolname;
-
     private List<VariablesTO> variables = new ArrayList<VariablesTO>();
+    private CicleStart cicleStart;
+    private CicleEnd cicleEnd;
 
     public String getPoolcode() {
         return poolcode;
@@ -46,6 +46,22 @@ public class Pool {
 
     public void setVariables(List<VariablesTO> variables) {
         this.variables = variables;
+    }
+
+    public CicleStart getCicleStart() {
+        return cicleStart;
+    }
+
+    public void setCicleStart(CicleStart cicleStart) {
+        this.cicleStart = cicleStart;
+    }
+
+    public CicleEnd getCicleEnd() {
+        return cicleEnd;
+    }
+
+    public void setCicleEnd(CicleEnd cicleEnd) {
+        this.cicleEnd = cicleEnd;
     }
 
 }
