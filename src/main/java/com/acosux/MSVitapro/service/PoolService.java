@@ -5,6 +5,8 @@
  */
 package com.acosux.MSVitapro.service;
 
+import com.acosux.MSVitapro.util.CicleEnd;
+import com.acosux.MSVitapro.util.CicleStart;
 import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
@@ -52,4 +54,10 @@ public interface PoolService {
 
     @Transactional
     List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+    
+    @Transactional
+    CicleStart dataCicleStart(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+    
+    @Transactional
+    CicleEnd dataCicleEnd(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
 }
