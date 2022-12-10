@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 import org.springframework.web.bind.annotation.PathVariable;
 import com.acosux.MSVitapro.service.PoolService;
+import com.acosux.MSVitapro.util.CicleEnd;
+import com.acosux.MSVitapro.util.CicleStart;
 import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.PoolTO;
@@ -32,10 +34,10 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/")
 public class UpdateController {
-
+    
     @Autowired
     PoolService poolService;
-
+    
     @RequestMapping(value = "/feeding/{farmcode}/{productCenter}/{regDateStart}", method = {RequestMethod.GET})
     public ResponseEntity<List<Pool>> getListPoolBYDate(
             @PathVariable("farmcode") String farmcode,
@@ -61,6 +63,8 @@ public class UpdateController {
                     List<VariablesTO> variablesItemConsumo;
                     List<VariablesTO> variablesItemConsumoEnd = new ArrayList();
                     List<VariablesTO> variablesItemConsumoDelete;
+                    CicleStart cicleIni = new CicleStart();
+                    CicleEnd cicleEnd = new CicleEnd();
                     List<Dates> listDates;
                     poolItem.setPoolcode(item.getPoolcode());
                     poolItem.setPoolname(item.getPoolname());
@@ -81,9 +85,14 @@ public class UpdateController {
                             variablesItemConsumoEnd.addAll(variablesItem);
                         }
                     }
+                    cicleIni = poolService.dataCicleStart(fecha, farmcode, item.getPoolcode(), productCenter);
+                    cicleEnd = poolService.dataCicleEnd(fecha, farmcode, item.getPoolcode(), productCenter);
                     poolItem.getVariables().addAll(variablesItemSobrevivencia);
                     poolItem.getVariables().addAll(variablesItemGramaje);
                     poolItem.getVariables().addAll(variablesItemConsumoEnd);
+                    poolItem.setCicleStart(cicleIni);
+                    poolItem.setCicleEnd(cicleEnd);
+                    
                     respues.add(poolItem);
                 }
             }
@@ -94,7 +103,7 @@ public class UpdateController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
+    
     @RequestMapping(value = "/listIntegration/{integration}", method = {RequestMethod.GET})
     public ResponseEntity<List<IntegratedPool>> getListIntegratedPool(
             @PathVariable("integration") String integration) {
@@ -108,7 +117,7 @@ public class UpdateController {
         }
         return new ResponseEntity<>(listPool, HttpStatus.OK);
     }
-
+    
     @RequestMapping(value = "/verifiyProduct/{farmcode}/{codeIntegration}/{listAll}", method = {RequestMethod.GET})
     public ResponseEntity<List<ProductIntegrationTO>> getListProductIntegration(
             @PathVariable("farmcode") String farCode,
@@ -125,7 +134,7 @@ public class UpdateController {
         return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
     }
     
-     @RequestMapping(value = "/feedingPool/{farmcode}/{productCenter}/{regDateStart}/{pool}", method = {RequestMethod.GET})
+    @RequestMapping(value = "/feedingPool/{farmcode}/{productCenter}/{regDateStart}/{pool}", method = {RequestMethod.GET})
     public ResponseEntity<List<Pool>> getListItemByPool(
             @PathVariable("farmcode") String farmcode,
             @PathVariable("productCenter") String productCenter,
@@ -184,5 +193,5 @@ public class UpdateController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-
+    
 }

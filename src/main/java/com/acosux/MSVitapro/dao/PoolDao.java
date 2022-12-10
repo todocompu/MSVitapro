@@ -5,6 +5,8 @@
  */
 package com.acosux.MSVitapro.dao;
 
+import com.acosux.MSVitapro.util.CicleEnd;
+import com.acosux.MSVitapro.util.CicleStart;
 import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.Pool;
@@ -38,4 +40,9 @@ public interface PoolDao extends GenericDao<Pool, Integer> {
     List<ProductIntegrationTO> getListProductIntegration(String farmCode, String codeIntegracion, boolean listAll) throws Exception;
 
     List<VariablesTO> listDataConsDelete(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
+    CicleStart dataCicleStart(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
+    CicleEnd dataCicleEnd(String regDateStart, String farmcode, String pool, String productCenter) throws Exception;
+
 }

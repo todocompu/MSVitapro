@@ -5,6 +5,8 @@
  */
 package com.acosux.MSVitapro.dao;
 
+import com.acosux.MSVitapro.util.CicleEnd;
+import com.acosux.MSVitapro.util.CicleStart;
 import com.acosux.MSVitapro.util.Dates;
 import com.acosux.MSVitapro.util.IntegratedPool;
 import com.acosux.MSVitapro.util.Pool;
@@ -87,6 +89,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         List<PoolTO> listPoolEditaConsumos;
         List<PoolTO> listoPoolUpdateConsumos;
         List<PoolTO> listPoolDeleteConsumos;
+        List<PoolTO> listPoolCorridas;
         List<PoolTO> listPool = new ArrayList<>();
         String sql;
         String filPool = pool == null || pool.equals("null") ? null : "'" + pool + "'";
@@ -106,6 +109,9 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         sql = "SELECT * FROM inventario.fun_list_pool_delete_consumo('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
         listPoolDeleteConsumos = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
 
+        sql = "SELECT * FROM produccion.fun_list_pool_corridas('" + farmcode + "', '" + regDateStart + "', '" + productCenter + "', " + filPool + ")";
+        listPoolCorridas = (genericSQLDao.obtenerPorSql(sql, PoolTO.class));
+
         listPool.addAll(listPoolDeleteGramaje);
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
@@ -120,6 +126,24 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         }
         listPool = listaEndPool;
         return listPool;
+    }
+
+    @Override
+    public CicleStart dataCicleStart(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        CicleStart inicial = new CicleStart();
+        String sql;
+        sql = "SELECT * FROM produccion.fun_corrida_ciclo_inicial('" + farmcode + "','" + regDateStart + "','" + pool + "','" + productCenter + "')";
+        inicial = genericSQLDao.obtenerObjetoPorSql(sql, CicleStart.class);
+        return inicial;
+    }
+
+    @Override
+    public CicleEnd dataCicleEnd(String regDateStart, String farmcode, String pool, String productCenter) throws Exception {
+        CicleEnd corEnd = new CicleEnd();
+        String sql;
+        sql = "SELECT * FROM produccion.fun_corrida_ciclo_final('" + farmcode + "','" + regDateStart + "','" + pool + "','" + productCenter + "')";
+        corEnd = genericSQLDao.obtenerObjetoPorSql(sql, CicleEnd.class);
+        return corEnd;
     }
 
     @Override
