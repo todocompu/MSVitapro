@@ -20,8 +20,8 @@ public class CicleStart implements Serializable {
     @Id
     private String date;
     private BigDecimal quantity;
-    private BigDecimal desity;
-    private BigDecimal desityPlus;
+    private BigDecimal density;
+    private BigDecimal densityPlus;
     private BigDecimal weight;
     private String laboratory;
     private String nauplius;
@@ -46,20 +46,20 @@ public class CicleStart implements Serializable {
         this.quantity = quantity;
     }
 
-    public BigDecimal getDesity() {
-        return desity;
+    public BigDecimal getDensity() {
+        return density;
     }
 
-    public void setDesity(BigDecimal desity) {
-        this.desity = desity;
+    public void setDensity(BigDecimal density) {
+        this.density = density;
     }
 
-    public BigDecimal getDesityPlus() {
-        return desityPlus;
+    public BigDecimal getDensityPlus() {
+        return densityPlus;
     }
 
-    public void setDesityPlus(BigDecimal desityPlus) {
-        this.desityPlus = desityPlus;
+    public void setDensityPlus(BigDecimal densityPlus) {
+        this.densityPlus = densityPlus;
     }
 
     public BigDecimal getWeight() {
