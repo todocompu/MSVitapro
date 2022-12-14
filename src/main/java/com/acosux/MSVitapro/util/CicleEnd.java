@@ -21,6 +21,8 @@ public class CicleEnd implements Serializable {
     private String date;
     private String biomass;
     private BigDecimal weight;
+    private BigDecimal balerBiomass;
+    private BigDecimal balerWeight;
     private String runNumber;
 
     public CicleEnd() {
@@ -48,6 +50,22 @@ public class CicleEnd implements Serializable {
 
     public void setWeight(BigDecimal weight) {
         this.weight = weight;
+    }
+
+    public BigDecimal getBalerBiomass() {
+        return balerBiomass;
+    }
+
+    public void setBalerBiomass(BigDecimal balerBiomass) {
+        this.balerBiomass = balerBiomass;
+    }
+
+    public BigDecimal getBalerWeight() {
+        return balerWeight;
+    }
+
+    public void setBalerWeight(BigDecimal balerWeight) {
+        this.balerWeight = balerWeight;
     }
 
     public String getRunNumber() {
