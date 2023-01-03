@@ -34,10 +34,10 @@ import org.springframework.http.ResponseEntity;
 @RestController
 @RequestMapping("/")
 public class UpdateController {
-    
+
     @Autowired
     PoolService poolService;
-    
+
     @RequestMapping(value = "/feeding/{farmcode}/{productCenter}/{regDateStart}", method = {RequestMethod.GET})
     public ResponseEntity<List<Pool>> getListPoolBYDate(
             @PathVariable("farmcode") String farmcode,
@@ -90,9 +90,10 @@ public class UpdateController {
                     poolItem.getVariables().addAll(variablesItemSobrevivencia);
                     poolItem.getVariables().addAll(variablesItemGramaje);
                     poolItem.getVariables().addAll(variablesItemConsumoEnd);
-                    poolItem.setCicleStart(cicleIni);
-                    poolItem.setCicleEnd(cicleEnd);
-                    
+                    if (poolItem.getVariables().size() > 0) {
+                        poolItem.setCicleStart(cicleIni);
+                        poolItem.setCicleEnd(cicleEnd);
+                    }
                     respues.add(poolItem);
                 }
             }
@@ -103,7 +104,7 @@ public class UpdateController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    
+
     @RequestMapping(value = "/listIntegration/{integration}", method = {RequestMethod.GET})
     public ResponseEntity<List<IntegratedPool>> getListIntegratedPool(
             @PathVariable("integration") String integration) {
@@ -117,7 +118,7 @@ public class UpdateController {
         }
         return new ResponseEntity<>(listPool, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/verifiyProduct/{farmcode}/{codeIntegration}/{listAll}", method = {RequestMethod.GET})
     public ResponseEntity<List<ProductIntegrationTO>> getListProductIntegration(
             @PathVariable("farmcode") String farCode,
@@ -133,7 +134,7 @@ public class UpdateController {
         }
         return new ResponseEntity<>(listProductIntegration, HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/feedingPool/{farmcode}/{productCenter}/{regDateStart}/{pool}", method = {RequestMethod.GET})
     public ResponseEntity<List<Pool>> getListItemByPool(
             @PathVariable("farmcode") String farmcode,
@@ -193,5 +194,5 @@ public class UpdateController {
         }
         return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
     }
-    
+
 }
