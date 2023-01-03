@@ -90,10 +90,8 @@ public class UpdateController {
                     poolItem.getVariables().addAll(variablesItemSobrevivencia);
                     poolItem.getVariables().addAll(variablesItemGramaje);
                     poolItem.getVariables().addAll(variablesItemConsumoEnd);
-                    if (poolItem.getVariables().size() > 0) {
-                        poolItem.setCicleStart(cicleIni);
-                        poolItem.setCicleEnd(cicleEnd);
-                    }
+                    poolItem.setCicleStart(cicleIni);
+                    poolItem.setCicleEnd(cicleEnd);
                     respues.add(poolItem);
                 }
             }
