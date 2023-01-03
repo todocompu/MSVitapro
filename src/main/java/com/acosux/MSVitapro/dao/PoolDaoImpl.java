@@ -116,6 +116,7 @@ public class PoolDaoImpl extends GenericDaoImpl<Pool, Integer> implements PoolDa
         listPool.addAll(listPoolEditaGramaje);
         listPool.addAll(listPoolEditaConsumos);
         listPool.addAll(listPoolDeleteConsumos);
+        listPool.addAll(listPoolCorridas);
         List listaEndPool = new ArrayList();
         Map<Integer, PoolTO> mapPool = new HashMap<Integer, PoolTO>(listPool.size());
         for (PoolTO p : listPool) {
